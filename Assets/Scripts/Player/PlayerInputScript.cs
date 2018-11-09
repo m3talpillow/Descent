@@ -7,6 +7,7 @@ public class PlayerInputScript : MonoBehaviour
 {
     // Dependencies
     private Animator anim;
+    private EquipedScript equiped;
 
     // Input fields
     private float verticalInput;
@@ -32,6 +33,8 @@ public class PlayerInputScript : MonoBehaviour
         anim_sheathSword = Animator.StringToHash("SheathSword");
         anim_moving = Animator.StringToHash("Moving");
         anim_armed = Animator.StringToHash("Armed");
+
+        equiped = this.GetComponent<EquipedScript>();
 }
 
     // On enabled
@@ -68,7 +71,8 @@ public class PlayerInputScript : MonoBehaviour
 
         // Get Mouse inputs
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            anim.SetTrigger(anim_mouseLeftClick);
+            if (anim.GetBool(anim_armed))
+                anim.SetTrigger(anim_mouseLeftClick);
 
         // Get Keyboard inputs
         if (Input.GetKeyDown(KeyCode.X))
@@ -87,6 +91,7 @@ public class PlayerInputScript : MonoBehaviour
             }
 
             // Toggle armed status
+            equiped.togglePrimaryWeapon();
             anim.SetBool(anim_armed, !armed);
         }
     }
