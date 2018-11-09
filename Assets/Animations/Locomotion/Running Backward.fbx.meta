@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a3be93dcc80bbde4184e81255c06ceaa
+guid: 5dee10d742bc0d944962a7bd9d3b1aff
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -173,7 +173,7 @@ ModelImporter:
       name: mixamo.com
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 37
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
