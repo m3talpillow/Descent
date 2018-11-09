@@ -8,19 +8,42 @@ public class PlayerInputScript : MonoBehaviour
     // Dependencies
     private Animator anim;
 
-    // Fields controlled by class
+    // Input fields
     private float verticalInput;
     private float horizontalInput;
 
+    // Animation fields
+    private int anim_vertical;
+    private int anim_horizontal;
+    private int anim_mouseLeftClick;
+    private int anim_drawSword;
+    private int anim_sheathSword;
+    private int anim_moving;
+    private int anim_armed;
+
+    // On initialization
     private void Awake()
     {
         anim = this.GetComponent<Animator>();
-    }
+        anim_vertical = Animator.StringToHash("Vertical");
+        anim_horizontal = Animator.StringToHash("Horizontal");
+        anim_mouseLeftClick = Animator.StringToHash("MouseLeftClick");
+        anim_drawSword = Animator.StringToHash("DrawSword");
+        anim_sheathSword = Animator.StringToHash("SheathSword");
+        anim_moving = Animator.StringToHash("Moving");
+        anim_armed = Animator.StringToHash("Armed");
+}
 
+    // On enabled
     void Start ()
     {
-        anim.SetBool("Armed", false);
-	}
+        // Reset all animation parameters
+        anim.ResetTrigger(anim_mouseLeftClick);
+        anim.ResetTrigger(anim_drawSword);
+        anim.ResetTrigger(anim_sheathSword);
+        anim.SetBool(anim_armed, false);
+        anim.SetBool(anim_moving, false);
+    }
 	
 	void Update ()
     {
@@ -35,36 +58,36 @@ public class PlayerInputScript : MonoBehaviour
 
         // Set animator variables from inputs
         if (verticalInput != 0 || horizontalInput != 0)
-            anim.SetBool("Moving", true);
+            anim.SetBool(anim_moving, true);
         else
-            anim.SetBool("Moving", false);
+            anim.SetBool(anim_moving, false);
 
 
-        anim.SetFloat("Vertical", verticalInput);
-        anim.SetFloat("Horizontal", horizontalInput);
+        anim.SetFloat(anim_vertical, verticalInput);
+        anim.SetFloat(anim_horizontal, horizontalInput);
 
         // Get Mouse inputs
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            anim.SetTrigger("MouseLeftClick");
+            anim.SetTrigger(anim_mouseLeftClick);
 
         // Get Keyboard inputs
         if (Input.GetKeyDown(KeyCode.X))
         {
-            bool armed = anim.GetBool("Armed");
+            bool armed = anim.GetBool(anim_armed);
 
             if (armed)
             {
-                anim.SetTrigger("SheathSword");
-                anim.ResetTrigger("DrawSword");
+                anim.SetTrigger(anim_sheathSword);
+                anim.ResetTrigger(anim_drawSword);
             }
             else
             {
-                anim.SetTrigger("DrawSword");
-                anim.ResetTrigger("SheathSword");
+                anim.SetTrigger(anim_drawSword);
+                anim.ResetTrigger(anim_sheathSword);
             }
 
             // Toggle armed status
-            anim.SetBool("Armed", !armed);
+            anim.SetBool(anim_armed, !armed);
         }
     }
 }
