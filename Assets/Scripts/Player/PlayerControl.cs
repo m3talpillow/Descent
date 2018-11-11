@@ -17,6 +17,9 @@ public class PlayerControl : MonoBehaviour
     private int anim_sheathSword;
     private int anim_armed;
 
+    private Transform parent;
+    public float moveSpeed;
+
     // On initialization gather dependencies 
     private void Awake()
     {
@@ -32,6 +35,10 @@ public class PlayerControl : MonoBehaviour
         InputManager.HorizontalInput += MoveHorizontal;
         InputManager.XKey += DrawWeapon;
         InputManager.LeftMouse += LightAttack;
+
+        // Movement variables
+        moveSpeed = 0.1f;
+        parent = transform.parent;
 
         // Create hashed strings for faster Animator control
         anim_vertical = Animator.StringToHash("Vertical");
@@ -52,12 +59,16 @@ public class PlayerControl : MonoBehaviour
     private void MoveVertical(float verticalInput)
     {
         anim.SetFloat(anim_vertical, verticalInput);
+
+        parent.position += parent.forward * verticalInput * moveSpeed;
     }
 
     // Move player left and right
     private void MoveHorizontal(float horizontalInput)
     {
         anim.SetFloat(anim_horizontal, horizontalInput);
+
+        parent.position += parent.right * horizontalInput * moveSpeed;
     }
 
     // Player takes out weapon
