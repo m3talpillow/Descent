@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipedScript : MonoBehaviour
+public class Equiped : MonoBehaviour
 {
     public GameObject primaryWeapon;
 	

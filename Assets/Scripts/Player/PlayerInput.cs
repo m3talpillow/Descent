@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class PlayerInputScript : MonoBehaviour
+public class PlayerInput: MonoBehaviour
 {
     // Dependencies
-    private Animator anim;
-    private EquipedScript equiped;
+    private Equiped equiped;
 
     // Input fields
     private float verticalInput;
     private float horizontalInput;
 
     // Animation fields
+    private Animator anim;
     private int anim_vertical;
     private int anim_horizontal;
     private int anim_mouseLeftClick;
@@ -22,10 +22,17 @@ public class PlayerInputScript : MonoBehaviour
     private int anim_moving;
     private int anim_armed;
 
-    // On initialization
+    // On initialization gather dependencies 
     private void Awake()
     {
         anim = this.GetComponent<Animator>();
+        equiped = this.GetComponent<Equiped>();
+    }
+
+    // Called after Awake() and once enabled
+    void Start ()
+    {
+        // Create hashed strings for faster Animator control
         anim_vertical = Animator.StringToHash("Vertical");
         anim_horizontal = Animator.StringToHash("Horizontal");
         anim_mouseLeftClick = Animator.StringToHash("MouseLeftClick");
@@ -34,13 +41,7 @@ public class PlayerInputScript : MonoBehaviour
         anim_moving = Animator.StringToHash("Moving");
         anim_armed = Animator.StringToHash("Armed");
 
-        equiped = this.GetComponent<EquipedScript>();
-}
-
-    // On enabled
-    void Start ()
-    {
-        // Reset all animation parameters
+        // Set all animation parameters to starting state
         anim.ResetTrigger(anim_mouseLeftClick);
         anim.ResetTrigger(anim_drawSword);
         anim.ResetTrigger(anim_sheathSword);
