@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    public static bool inputLocked;
+
     /* Delegates are function variables. 
      * Assign a function to them to be used when it is called. 
      * This allows us to replace functions like we change variables.
@@ -13,18 +15,36 @@ public class InputManager : MonoBehaviour
     public static event MovementAction VerticalInput;
     public static event MovementAction HorizontalInput;
 
-    void Start()
-    {
+    public delegate void KeyboardAction();
+    public static event KeyboardAction XKey;
+    public static event KeyboardAction LeftMouse;
 
+    public void Start()
+    {
+        inputLocked = false;
     }
 
+    // If a change in value and the action is subscribed to, trigger event
     private void Update()
     {
-        // If a change in value and the action is subscribed to, trigger event
+        if (inputLocked)
+            return; 
+
+        // Movement inputs
         if (Input.GetAxis("Vertical") != 0 && VerticalInput != null)
             VerticalInput(Input.GetAxis("Vertical"));
 
         if (Input.GetAxis("Horizontal") != 0 && HorizontalInput != null)
             HorizontalInput(Input.GetAxis("Horizontal"));
+
+        // Key press inputs
+        if (Input.anyKey)
+        {
+            if (Input.GetKeyDown(KeyCode.X) && XKey != null)
+                XKey();
+
+            if (Input.GetKeyDown(KeyCode.Mouse0) && LeftMouse != null)
+                LeftMouse();
+        }
     }
 }
