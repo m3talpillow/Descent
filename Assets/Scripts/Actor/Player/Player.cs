@@ -10,4 +10,9 @@ using UnityEngine;
 public class Player : Actor
 {
 
+	private void Start()
+	{
+		base.startInit();
+	}
+
 }
