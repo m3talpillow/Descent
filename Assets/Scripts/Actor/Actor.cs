@@ -1,22 +1,24 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInfo : MonoBehaviour
-{
-    private float health;
-    private float stamina;
+/*
+ * Purpose: Class for actor gameplay information and behavior
+ * Authors: Jared Johannson
+ */ 
 
-	void Start ()
+public class Actor : MonoBehaviour, SuperMethods
+{
+    private float health { get; set; }
+    private float stamina { get; set; }
+
+	public void startInit ()
     {
         health = 100;
         stamina = 100;
 	}
-	
-	void Update ()
-    {
-		
-	}
+
+    public void awakeInit() { }
 
     public void takeDamage(float damage)
     {
