@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Purpose: Temporary class for inventory 
+ * Authors: Jared Johannson
+ */ 
+
 public class Equiped : MonoBehaviour
 {
     public GameObject primaryWeapon;

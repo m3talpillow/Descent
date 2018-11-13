@@ -1,44 +1,42 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Purpose: Abstract class to control actor animations & movement
+ * Authors: Jared Johannson, Joe Peaden
+ */ 
+
 [RequireComponent(typeof(Animator))]
-public class PlayerControl : MonoBehaviour
+public abstract class ActorControl : MonoBehaviour
 {
-    // Dependencies
-    private Equiped equiped;
+	// Dependencies
+    protected Equiped equiped;
 
     // Animation fields
-    private Animator anim;
-    private int anim_vertical;
-    private int anim_horizontal;
-    private int anim_mouseLeftClick;
-    private int anim_drawSword;
-    private int anim_sheathSword;
-    private int anim_armed;
+    protected Animator anim;
+    protected int anim_vertical;
+    protected int anim_horizontal;
+    protected int anim_mouseLeftClick;
+    protected int anim_drawSword;
+    protected int anim_sheathSword;
+    protected int anim_armed;
 
-    private Transform parent;
+    // Other
+    protected Transform parent;
     public float moveSpeed;
 
     // On initialization gather dependencies 
-    private void Awake()
+    protected void awakeInit()
     {
         anim = this.GetComponent<Animator>();
         equiped = this.GetComponent<Equiped>();
     }
 
-    // Called after Awake() and once enabled
-    void Start ()
+    // for initialization of stuff in start method
+    protected void startInit()
     {
-        // Subscribe to events from InputManager and assign methods
-        InputManager.VerticalInput += MoveVertical;
-        InputManager.HorizontalInput += MoveHorizontal;
-        InputManager.XKey += DrawWeapon;
-        InputManager.LeftMouse += LightAttack;
-
-        // Movement variables
-        moveSpeed = 0.1f;
-        parent = transform.parent;
+    	parent = transform.parent;
 
         // Create hashed strings for faster Animator control
         anim_vertical = Animator.StringToHash("Vertical");
@@ -55,24 +53,8 @@ public class PlayerControl : MonoBehaviour
         anim.SetBool(anim_armed, false);
     }
 
-    // Move player forward and backwards
-    private void MoveVertical(float verticalInput)
-    {
-        anim.SetFloat(anim_vertical, verticalInput);
-
-        parent.position += parent.forward * verticalInput * moveSpeed;
-    }
-
-    // Move player left and right
-    private void MoveHorizontal(float horizontalInput)
-    {
-        anim.SetFloat(anim_horizontal, horizontalInput);
-
-        parent.position += parent.right * horizontalInput * moveSpeed;
-    }
-
-    // Player takes out weapon
-    private void DrawWeapon()
+        // Player takes out weapon
+    protected void DrawWeapon()
     {
         // Animator controls
         anim.SetBool(anim_armed, true);
@@ -86,7 +68,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     // Player puts away weapon
-    private void SheathWeapon()
+    protected void SheathWeapon()
     {
         anim.SetBool(anim_armed, false);
         anim.SetTrigger(anim_sheathSword);
@@ -98,9 +80,10 @@ public class PlayerControl : MonoBehaviour
         InputManager.XKey -= SheathWeapon;
     }
 
-    private void LightAttack()
+    protected void LightAttack()
     {
         if (anim.GetBool(anim_armed))
             anim.SetTrigger(anim_mouseLeftClick);
     }
+
 }
