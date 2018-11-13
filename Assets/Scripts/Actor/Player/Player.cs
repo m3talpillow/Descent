@@ -7,7 +7,7 @@ using UnityEngine;
  * Authors: Jared Johannson
  */ 
 
-public class Player : ActorInfo
+public class Player : Actor
 {
 
 }

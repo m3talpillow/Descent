@@ -7,21 +7,18 @@ using UnityEngine;
  * Authors: Jared Johannson
  */ 
 
-public class Actor : MonoBehaviour
+public class Actor : MonoBehaviour, SuperMethods
 {
     private float health { get; set; }
     private float stamina { get; set; }
 
-	void Start ()
+	public void startInit ()
     {
         health = 100;
         stamina = 100;
 	}
-	
-	void Update ()
-    {
-		
-	}
+
+    public void awakeInit() { }
 
     public void takeDamage(float damage)
     {

@@ -8,7 +8,7 @@ using UnityEngine;
  */ 
 
 [RequireComponent(typeof(Animator))]
-public abstract class ActorControl : MonoBehaviour
+public abstract class ActorControl : MonoBehaviour, SuperMethods
 {
 	// Dependencies
     protected Equiped equiped;
@@ -27,14 +27,14 @@ public abstract class ActorControl : MonoBehaviour
     public float moveSpeed;
 
     // On initialization gather dependencies 
-    protected void awakeInit()
+    public void awakeInit()
     {
         anim = this.GetComponent<Animator>();
         equiped = this.GetComponent<Equiped>();
     }
 
     // for initialization of stuff in start method
-    protected void startInit()
+    public void startInit()
     {
     	parent = transform.parent;
 
