@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Purpose: Maps keys to actions for the player
+ * Authors: Jared Johannson
+ */
+
 public class InputManager : MonoBehaviour
 {
     public static bool inputLocked;
@@ -18,8 +22,9 @@ public class InputManager : MonoBehaviour
     public delegate void KeyboardAction();
     public static event KeyboardAction XKey;
     public static event KeyboardAction LeftMouse;
+    public static event KeyboardAction RightMouse;
 
-    public void Start()
+    public void Awake()
     {
         inputLocked = false;
     }
@@ -45,6 +50,9 @@ public class InputManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse0) && LeftMouse != null)
                 LeftMouse();
+
+            if (Input.GetKeyDown(KeyCode.Mouse1) && RightMouse != null)
+                RightMouse();
         }
     }
 }
