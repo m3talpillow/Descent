@@ -16,6 +16,8 @@ public class Enemy : Actor
     {
         base.Awake();
         characterName = "Enemy" + Object.FindObjectsOfType<Player>().Length.ToString(); ;
+
+        moveSpeed = 2.0f;
     }
 
     // move towards target

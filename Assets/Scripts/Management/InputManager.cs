@@ -13,6 +13,9 @@ public class InputManager : MonoBehaviour
     public static bool mouseInputLocked;
     public static bool keyboardInputLocked;
 
+    public static float verticalMouseInput;
+    public static float horizontalMouseInput;
+
     /* Delegates are function variables. 
      * Assign a function to them to be used when it is called. 
      * This allows us to replace functions like we change variables.
@@ -21,8 +24,8 @@ public class InputManager : MonoBehaviour
 
     // Actions that passes along a float to the subscribed functions
     public delegate void InputAction(float inputValue);
-    public static event InputAction VerticalMouseInput;
-    public static event InputAction HorizontalMouseInput;
+    //public static event InputAction VerticalMouseInput;
+    //public static event InputAction HorizontalMouseInput;
     public static event InputAction VerticalMoveInput;
     public static event InputAction HorizontalMoveInput;
 
@@ -58,11 +61,8 @@ public class InputManager : MonoBehaviour
 
     private void MouseInputs()
     {
-        if (VerticalMouseInput != null)
-            VerticalMouseInput(Input.GetAxis("Mouse Y"));
-
-        if (HorizontalMouseInput != null)
-            HorizontalMouseInput(Input.GetAxis("Mouse X"));
+        verticalMouseInput = Input.GetAxis("Mouse Y");
+        horizontalMouseInput = Input.GetAxis("Mouse X");
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && LightAttack != null)
             LightAttack();

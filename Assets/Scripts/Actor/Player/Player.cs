@@ -9,6 +9,8 @@ using UnityEngine;
 
 public class Player : Actor
 {
+    private float horizontalRotation;
+
     public override void Awake()
     {
         base.Awake();
@@ -20,5 +22,14 @@ public class Player : Actor
         InputManager.ToggleArmed += ToggleWeapon;
         InputManager.LightAttack += LightAttack;
         InputManager.HeavyAttack += HeavyAttack;
+
+        horizontalRotation = parent.transform.rotation.y;
+    }
+
+    public void Update()
+    {
+        horizontalRotation += InputManager.horizontalMouseInput * Time.deltaTime * Settings.sensitivity;
+
+        parent.transform.rotation = Quaternion.Euler(parent.transform.rotation.x, horizontalRotation, 0.0f);
     }
 }
