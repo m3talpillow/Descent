@@ -11,12 +11,10 @@ public interface IActorControl
     //void Dodge();
     //void Jump();
 
-    void DrawWeapon();
-    void SheathWeapon();
+    void ToggleWeapon();
     void LightAttack();
     void HeavyAttack();
     //void Block();
-    //void CastMagic();
 
     void DamageTaken(float damage);
     void StaminaLost(float stamina);

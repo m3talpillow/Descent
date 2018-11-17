@@ -144,6 +144,7 @@ public abstract class Actor : MonoBehaviour, IActorControl
         {
             health = 0;
             Debug.Log("Health has run out for: " + characterName + ", and has died!");
+            GameObject.Destroy(this);
         }
     }
 
@@ -164,32 +165,34 @@ public abstract class Actor : MonoBehaviour, IActorControl
     }
 
     // Bring out weapons, now armed
-    public virtual void DrawWeapon()
+    private void DrawWeapon()
     {
         anim.SetBool(anim_armed, true);
         anim.SetTrigger(anim_drawWeapons);
         anim.ResetTrigger(anim_sheathWeapons);
-
-        ToggleWeapon();
     }
 
     // Put weapons away, now unarmed
-    public virtual void SheathWeapon()
+    private void SheathWeapon()
     {
         anim.SetBool(anim_armed, false);
         anim.SetTrigger(anim_sheathWeapons);
         anim.ResetTrigger(anim_drawWeapons);
-
-        ToggleWeapon();
     }
 
     // To draw or sheath your weapons
-    private void ToggleWeapon()
+    public void ToggleWeapon()
     {
         if (weapon.activeSelf)
+        {
+            SheathWeapon();
             weapon.SetActive(false);
+        }
         else
+        {
+            DrawWeapon();
             weapon.SetActive(true);
+        }
     }
 
     // If player has weapon out, does light attack
@@ -204,7 +207,5 @@ public abstract class Actor : MonoBehaviour, IActorControl
     {
         if (anim.GetBool(anim_armed))
             anim.SetTrigger(anim_mouseRightClick);
-    }
-
-    
+    }  
 }

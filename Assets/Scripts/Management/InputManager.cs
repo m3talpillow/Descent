@@ -2,57 +2,96 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* Purpose: Maps keys to actions for the player
+/* Purpose: Maps inputs to actions for the player.
+ *          If deployed to additional platforms, easy to modify for actions.
  * Authors: Jared Johannson
  */
 
 public class InputManager : MonoBehaviour
 {
     public static bool inputLocked;
+    public static bool mouseInputLocked;
+    public static bool keyboardInputLocked;
 
     /* Delegates are function variables. 
      * Assign a function to them to be used when it is called. 
      * This allows us to replace functions like we change variables.
+     * In another class, the desired method is assigned to its reference function.
      */
-    public delegate void MovementAction(float inputValue);
-    // This is a field of the delegate, which is assigned a method to call in another class
-    public static event MovementAction VerticalInput;
-    public static event MovementAction HorizontalInput;
 
-    public delegate void KeyboardAction();
-    public static event KeyboardAction XKey;
-    public static event KeyboardAction LeftMouse;
-    public static event KeyboardAction RightMouse;
+    // Actions that passes along a float to the subscribed functions
+    public delegate void InputAction(float inputValue);
+    public static event InputAction VerticalMouseInput;
+    public static event InputAction HorizontalMouseInput;
+    public static event InputAction VerticalMoveInput;
+    public static event InputAction HorizontalMoveInput;
 
+    public delegate void TriggerAction();
+    public static event TriggerAction Sprint;
+    public static event TriggerAction Jump;
+    public static event TriggerAction ToggleArmed;
+
+    // Combat
+    public static event TriggerAction LightAttack;
+    public static event TriggerAction HeavyAttack;
+    public static event TriggerAction Block;
+    public static event TriggerAction Dodge;
+    
     public void Awake()
     {
         inputLocked = false;
+        mouseInputLocked = false;
+        keyboardInputLocked = false;
     }
 
-    // If a change in value and the action is subscribed to, trigger event
     private void Update()
     {
         if (inputLocked)
-            return; 
+            return;
 
-        // Movement inputs
-        if (Input.GetAxis("Vertical") != 0 && VerticalInput != null)
-            VerticalInput(Input.GetAxis("Vertical"));
+        if (!mouseInputLocked)
+            MouseInputs();
 
-        if (Input.GetAxis("Horizontal") != 0 && HorizontalInput != null)
-            HorizontalInput(Input.GetAxis("Horizontal"));
+        if (!keyboardInputLocked)
+            KeyboardInputs();
+    }
 
-        // Key press inputs
-        if (Input.anyKey)
+    private void MouseInputs()
+    {
+        if (VerticalMouseInput != null)
+            VerticalMouseInput(Input.GetAxis("Mouse Y"));
+
+        if (HorizontalMouseInput != null)
+            HorizontalMouseInput(Input.GetAxis("Mouse X"));
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && LightAttack != null)
+            LightAttack();
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && HeavyAttack != null)
+            HeavyAttack();
+    }
+
+    private void KeyboardInputs()
+    {
+        if (VerticalMoveInput != null)
+            VerticalMoveInput(Input.GetAxis("Vertical"));
+
+        if (HorizontalMoveInput != null)
+            HorizontalMoveInput(Input.GetAxis("Horizontal"));
+
+        if (Input.GetKeyDown(KeyCode.X) && ToggleArmed != null)
+            ToggleArmed();
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.X) && XKey != null)
-                XKey();
+            if (Dodge != null) Dodge();
+            if (Jump != null) Jump();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && LeftMouse != null)
-                LeftMouse();
-
-            if (Input.GetKeyDown(KeyCode.Mouse1) && RightMouse != null)
-                RightMouse();
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            if (Dodge != null) Block();
+            if (Jump != null) Sprint();
         }
     }
 }

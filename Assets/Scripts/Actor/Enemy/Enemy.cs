@@ -15,7 +15,7 @@ public class Enemy : Actor
     public override void Awake()
     {
         base.Awake();
-        characterName = "Enemy";
+        characterName = "Enemy" + Object.FindObjectsOfType<Player>().Length.ToString(); ;
     }
 
     // move towards target

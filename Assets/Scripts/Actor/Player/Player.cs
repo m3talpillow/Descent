@@ -12,29 +12,13 @@ public class Player : Actor
     public override void Awake()
     {
         base.Awake();
-        characterName = "Player";
+        characterName = "Player" + Object.FindObjectsOfType<Player>().Length.ToString();
 
         // Subscribe to events from InputManager and assign methods
-        InputManager.VerticalInput += MoveVertical;
-        InputManager.HorizontalInput += MoveHorizontal;
-        InputManager.XKey += DrawWeapon;
-        InputManager.LeftMouse += LightAttack;
-        InputManager.RightMouse += HeavyAttack;
-    }
-
-    public override void DrawWeapon()
-    {
-        base.DrawWeapon();
-
-        InputManager.XKey -= DrawWeapon;
-        InputManager.XKey += SheathWeapon;
-    }
-
-    public override void SheathWeapon()
-    {
-        base.SheathWeapon();
-
-        InputManager.XKey -= SheathWeapon;
-        InputManager.XKey += DrawWeapon;
+        InputManager.VerticalMoveInput += MoveVertical;
+        InputManager.HorizontalMoveInput += MoveHorizontal;
+        InputManager.ToggleArmed += ToggleWeapon;
+        InputManager.LightAttack += LightAttack;
+        InputManager.HeavyAttack += HeavyAttack;
     }
 }
