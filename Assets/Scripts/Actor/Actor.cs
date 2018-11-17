@@ -14,16 +14,15 @@ public abstract class Actor : MonoBehaviour, IActorControl
     // Parent info
     protected Transform parent;
 
-    // Character's current max
-    private float max_health;
-    private float max_stamina;
-
-    // Character stats
+    // Temp attributes 
+    private float max_health = 100;
+    private float max_stamina = 100;
+    protected bool dead;
+    public float moveSpeed;
     private float health;
     private float stamina;
-
     public string characterName;
-    public float moveSpeed;
+    
 
     /* Possible fields to add
      * 
@@ -38,11 +37,14 @@ public abstract class Actor : MonoBehaviour, IActorControl
     protected Animator anim;
     protected int anim_vertical;
     protected int anim_horizontal;
-    protected int anim_mouseLeftClick;
-    protected int anim_mouseRightClick;
+    protected int anim_lightAttack;
+    protected int anim_heavyAttack;
     protected int anim_drawWeapons;
     protected int anim_sheathWeapons;
+    protected int anim_jump;
+    protected int anim_mirror;
     protected int anim_armed;
+    protected int anim_death;
 
     // Equiped items
     public GameObject weapon;
@@ -61,18 +63,22 @@ public abstract class Actor : MonoBehaviour, IActorControl
         }
 
         // Create hashed strings for faster Animator control
-        anim_vertical = Animator.StringToHash("Vertical");
-        anim_horizontal = Animator.StringToHash("Horizontal");
-        anim_mouseLeftClick = Animator.StringToHash("MouseLeftClick");
-        anim_mouseRightClick = Animator.StringToHash("MouseRightClick");
-        anim_drawWeapons = Animator.StringToHash("DrawSword");
-        anim_sheathWeapons = Animator.StringToHash("SheathSword");
-        anim_armed = Animator.StringToHash("Armed");
+        anim_vertical = Animator.StringToHash("verticalMove");
+        anim_horizontal = Animator.StringToHash("horizontalMove");
+        anim_lightAttack = Animator.StringToHash("lightAttack");
+        anim_heavyAttack = Animator.StringToHash("heavyAttack");
+        anim_drawWeapons = Animator.StringToHash("drawSword");
+        anim_sheathWeapons = Animator.StringToHash("sheathSword");
+        anim_jump = Animator.StringToHash("jump");
+        anim_mirror = Animator.StringToHash("mirror");
+        anim_armed = Animator.StringToHash("armed");
+        anim_death = Animator.StringToHash("death");
 
         // Set maxes
-        max_health = 100;
-        max_stamina = 100;
+        health = max_health;
+        stamina = max_stamina;
         moveSpeed = 0.1f;
+        dead = false;
     }
 
     // Called when object is enabled, after all object activate awake
@@ -81,8 +87,8 @@ public abstract class Actor : MonoBehaviour, IActorControl
         anim = this.GetComponent<Animator>();
 
         // Set all animation parameters to starting state
-        anim.ResetTrigger(anim_mouseLeftClick);
-        anim.ResetTrigger(anim_mouseRightClick);
+        anim.ResetTrigger(anim_lightAttack);
+        anim.ResetTrigger(anim_heavyAttack);
         anim.ResetTrigger(anim_drawWeapons);
         anim.ResetTrigger(anim_sheathWeapons);
         anim.SetBool(anim_armed, false);
@@ -94,6 +100,9 @@ public abstract class Actor : MonoBehaviour, IActorControl
     // Updates 30 times per second
     protected void FixedUpdate()
     {
+        if (dead)
+            return;
+
         RegainStamina();
         RegainHealth();
     }
@@ -103,7 +112,7 @@ public abstract class Actor : MonoBehaviour, IActorControl
     {
         if (stamina < max_stamina)
         {
-            stamina += stamina * 0.05f;
+            stamina += max_stamina * 0.0005f;
             if (stamina > max_stamina)
                 stamina = max_stamina;
         }
@@ -114,7 +123,7 @@ public abstract class Actor : MonoBehaviour, IActorControl
     {
         if (health < max_health)
         {
-            health += health * 0.05f;
+            health += max_health * 0.0005f;
             if (health > max_health)
                 health = max_health;
         }
@@ -140,11 +149,12 @@ public abstract class Actor : MonoBehaviour, IActorControl
     {
         health -= damage;
 
-        if (health < 0)
+        if (health <= 0)
         {
             health = 0;
+            Death();
             Debug.Log("Health has run out for: " + characterName + ", and has died!");
-            GameObject.Destroy(this);
+            anim.SetTrigger(anim_death);
         }
     }
 
@@ -199,13 +209,28 @@ public abstract class Actor : MonoBehaviour, IActorControl
     public virtual void LightAttack()
     {
         if (anim.GetBool(anim_armed))
-            anim.SetTrigger(anim_mouseLeftClick);
+            anim.SetTrigger(anim_lightAttack);
+
+        StaminaLost(30);
     }
 
     // If player has weapon out, does heavy attack
     public virtual void HeavyAttack()
     {
         if (anim.GetBool(anim_armed))
-            anim.SetTrigger(anim_mouseRightClick);
+            anim.SetTrigger(anim_heavyAttack);
+
+        StaminaLost(45);
     }  
+
+    public virtual void Jump()
+    {
+        anim.SetTrigger(anim_jump);
+    }
+
+    private void Death()
+    {
+        dead = true;
+        InputManager.keyboardInputLocked = true;
+    }
 }

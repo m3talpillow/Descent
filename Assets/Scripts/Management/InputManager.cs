@@ -7,7 +7,7 @@ using UnityEngine;
  * Authors: Jared Johannson
  */
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
     public static bool inputLocked;
     public static bool mouseInputLocked;
@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
 
     public static float verticalMouseInput;
     public static float horizontalMouseInput;
+    public static float scrollwheelInput;
 
     /* Delegates are function variables. 
      * Assign a function to them to be used when it is called. 
@@ -28,6 +29,7 @@ public class InputManager : MonoBehaviour
     //public static event InputAction HorizontalMouseInput;
     public static event InputAction VerticalMoveInput;
     public static event InputAction HorizontalMoveInput;
+    public static event InputAction CameraZoom;
 
     public delegate void TriggerAction();
     public static event TriggerAction Sprint;
@@ -63,12 +65,16 @@ public class InputManager : MonoBehaviour
     {
         verticalMouseInput = Input.GetAxis("Mouse Y");
         horizontalMouseInput = Input.GetAxis("Mouse X");
+        scrollwheelInput = Input.GetAxis("Mouse ScrollWheel");
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && LightAttack != null)
             LightAttack();
 
         if (Input.GetKeyDown(KeyCode.Mouse1) && HeavyAttack != null)
             HeavyAttack();
+
+        if (scrollwheelInput != 0 && CameraZoom != null)
+            CameraZoom(scrollwheelInput);
     }
 
     private void KeyboardInputs()

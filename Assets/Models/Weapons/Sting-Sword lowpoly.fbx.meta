@@ -26,9 +26,14 @@ ModelImporter:
     4300002: Pommeau
     4300004: Manche
     4300006: Lame
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sting
+    second: {fileID: 2100000, guid: d98a1a502419236409b383f15636fe60, type: 2}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1

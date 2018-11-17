@@ -22,6 +22,7 @@ public class Player : Actor
         InputManager.ToggleArmed += ToggleWeapon;
         InputManager.LightAttack += LightAttack;
         InputManager.HeavyAttack += HeavyAttack;
+        InputManager.Jump += Jump;
 
         horizontalRotation = parent.transform.rotation.y;
     }
@@ -29,6 +30,9 @@ public class Player : Actor
     public void Update()
     {
         horizontalRotation += InputManager.horizontalMouseInput * Time.deltaTime * Settings.sensitivity;
+
+        if (dead)
+            return;
 
         parent.transform.rotation = Quaternion.Euler(parent.transform.rotation.x, horizontalRotation, 0.0f);
     }

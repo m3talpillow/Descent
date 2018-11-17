@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Settings : MonoBehaviour
+public class Settings : Singleton<Settings>
 {
     public static float sensitivity { get; set; }
 

@@ -10,8 +10,8 @@ using UnityEngine;
 public class CameraCollision : MonoBehaviour
 {
     // Variables to decide on concrete values
-    public float minDistance = 1f;
-    public float maxDistance = 3.5f;
+    public float minDistance = 2f;
+    public float maxDistance = 5f;
     public float smoothing = 20f;
     public float cushion = 0.9f;
 
@@ -24,6 +24,8 @@ public class CameraCollision : MonoBehaviour
     {
         dollyDirection = transform.localPosition.normalized;
         setDistance = transform.localPosition.magnitude;
+
+        InputManager.CameraZoom += CameraZoom;
 	}
 	
 	// Find where camera should be, if a collision is detected then move camera forward
@@ -39,4 +41,9 @@ public class CameraCollision : MonoBehaviour
 
         transform.localPosition = Vector3.Lerp(transform.localPosition, dollyDirection * adjustDistance, Time.deltaTime * smoothing);
 	}
+
+    public void CameraZoom(float scrollwheelInput)
+    {
+        setDistance = Mathf.Clamp(setDistance - scrollwheelInput, minDistance, maxDistance);
+    }
 }
