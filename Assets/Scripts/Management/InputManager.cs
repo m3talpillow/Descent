@@ -22,6 +22,14 @@ public class InputManager : Singleton<InputManager>
      * This allows us to replace functions like we change variables.
      * In another class, the desired method is assigned to its reference function.
      */
+<<<<<<< Updated upstream
+=======
+    public delegate void MovementAction(float inputValue);
+    // This is a field of the delegate, which is assigned a method to call in another class
+    public static event MovementAction VerticalInput;
+    public static event MovementAction HorizontalInput;
+    public static event MovementAction RotationInput;
+>>>>>>> Stashed changes
 
     // Actions that passes along a float to the subscribed functions
     public delegate void InputAction(float inputValue);
@@ -73,6 +81,7 @@ public class InputManager : Singleton<InputManager>
         if (Input.GetKeyDown(KeyCode.Mouse1) && HeavyAttack != null)
             HeavyAttack();
 
+<<<<<<< Updated upstream
         if (scrollwheelInput != 0 && CameraZoom != null)
             CameraZoom(scrollwheelInput);
     }
@@ -89,6 +98,14 @@ public class InputManager : Singleton<InputManager>
             ToggleArmed();
 
         if (Input.GetKeyDown(KeyCode.Space))
+=======
+        // Rotation inputs
+        if(Input.GetAxis("Mouse X") != 0 && RotationInput != null)
+            RotationInput(Input.GetAxis("Mouse X"));
+        
+        // Key press inputs
+        if (Input.anyKey)
+>>>>>>> Stashed changes
         {
             if (Dodge != null) Dodge();
             if (Jump != null) Jump();
